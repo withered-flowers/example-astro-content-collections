@@ -1,0 +1,24 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// New Content Collection APi
+import { getCollection } from "astro:content";
+
+// Now we can use the generated types from /src/content/courses
+const courses = await getCollection("courses");
+---
+
+<Layout title="Welcome to the Courses">
+  <main>
+    <h1 class="text-3xl font-semibold">Hello World</h1>
+    <ul>
+      {
+        courses.map((course) => (
+          <li>
+            <a href={`/courses/${course.slug}`}>{course.data.title}</a>
+          </li>
+        ))
+      }
+    </ul>
+  </main>
+</Layout>

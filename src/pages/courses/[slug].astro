@@ -1,0 +1,35 @@
+---
+import { getCollection } from "astro:content";
+
+// We will define the static paths for this "params"
+export const getStaticPaths = async () => {
+  // Fetch all the collections from courses
+  const courseEntries = await getCollection("courses");
+
+  // Return all the params based on slug given and the props is the course which is generated
+  return courseEntries.map((course) => ({
+    params: {
+      slug: course.slug,
+    },
+    props: {
+      course,
+    },
+  }));
+};
+
+// Get the props (course)
+const { course } = Astro.props;
+
+// Render the Markdown content via course.render()
+const { Content } = await course.render();
+---
+
+<main class="p-4">
+  <article class="prose mx-auto lg:prose-xl">
+    <!-- We can extract the date from the Markdown's Frontmatter here -->
+    <h1>{course.data.title}</h1>
+    <!-- Now we can extract the Markdown Content as an element -->
+    <Content />
+    <a href="/">Back to Main</a>
+  </article>
+</main>
